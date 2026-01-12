@@ -8,7 +8,7 @@ __pycache__/
 # Models & temp
 temp_*.pdf
 *.log
-
+.joblib
 # Node
 Frontend/frontend/node_modules/
 Frontend/frontend/dist/
