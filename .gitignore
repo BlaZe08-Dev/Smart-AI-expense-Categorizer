@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+
+# Models & temp
+temp_*.pdf
+*.log
+
+# Node
+Frontend/frontend/node_modules/
+Frontend/frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
