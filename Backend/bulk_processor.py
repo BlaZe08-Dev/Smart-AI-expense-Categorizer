@@ -1,5 +1,5 @@
 from typing import List, Dict
-from pipeline import ExpenseCategorizationPipeline
+from .pipeline import ExpenseCategorizationPipeline
 
 
 class BulkExpenseProcessor:

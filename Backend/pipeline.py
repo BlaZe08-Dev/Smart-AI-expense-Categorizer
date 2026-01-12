@@ -1,10 +1,10 @@
-from Datataker import TransactionDataTaker
-from Payment_Mode import TransactionModeDetector
-from Merchant_Payment import MerchantExtractor
-from Merchant_kb import MerchantKnowledgeBase
-from Rule_Engine import RuleBasedClassifier
-from AI_Engine import AIcategorizationEngine
-from User_Overrides import UserOverridesStore
+from .Datataker import TransactionDataTaker
+from .Payment_Mode import TransactionModeDetector
+from .Merchant_Payment import MerchantExtractor
+from .Merchant_kb import MerchantKnowledgeBase
+from .Rule_Engine import RuleBasedClassifier
+from .AI_Engine import AIcategorizationEngine
+from .User_Overrides import UserOverridesStore
 
 class ExpenseCategorizationPipeline:
     """

@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
-from api.categorize_api import router as categorize_router
-from api.override_api import router as override_router
-from api.analytics_api import router as analytics_router
-from api.bulk_api import router as bulk_router
-from api.ingest_api import router as ingest_router
-from api.pdf_api import router as pdf_router
+from .api.categorize_api import router as categorize_router
+from .api.override_api import router as override_router
+from .api.analytics_api import router as analytics_router
+from .api.bulk_api import router as bulk_router
+from .api.ingest_api import router as ingest_router
+from .api.pdf_api import router as pdf_router
 
 app = FastAPI(
     title="Smart AI Expense Categorizer",

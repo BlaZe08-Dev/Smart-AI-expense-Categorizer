@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
 
-from pipeline import ExpenseCategorizationPipeline
+from ..pipeline import ExpenseCategorizationPipeline
 
 router = APIRouter(
     tags=["Categorization"]

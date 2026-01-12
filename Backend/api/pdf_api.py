@@ -1,12 +1,12 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from typing import Optional
 
-from pdf_ingestor import PDFIngestor
-from pdf_transaction_extractor import PDFTransactionExtractor
-from transaction_parser import TransactionParser
-from pipeline import ExpenseCategorizationPipeline
-from bulk_processor import BulkExpenseProcessor
-from analytics_engine import AnalyticsEngine
+from ..pdf_ingestor import PDFIngestor
+from ..pdf_transaction_extractor import PDFTransactionExtractor
+from ..transaction_parser import TransactionParser
+from ..pipeline import ExpenseCategorizationPipeline
+from ..bulk_processor import BulkExpenseProcessor
+from ..analytics_engine import AnalyticsEngine
 
 router = APIRouter(
     prefix="/pdf",

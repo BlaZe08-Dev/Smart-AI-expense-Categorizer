@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from typing import List, Dict
 
-from pipeline import ExpenseCategorizationPipeline
-from bulk_processor import BulkExpenseProcessor
-from api.analytics_api import TRANSACTIONS_STORE
+from ..pipeline import ExpenseCategorizationPipeline
+from ..bulk_processor import BulkExpenseProcessor
+from .analytics_api import TRANSACTIONS_STORE
 
 router = APIRouter(
     prefix="/bulk",

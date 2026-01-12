@@ -2,10 +2,10 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List,Dict
 
-from pipeline import ExpenseCategorizationPipeline
-from bulk_processor import BulkExpenseProcessor
-from analytics_engine import AnalyticsEngine
-from api.ingest_api import TRANSACTIONS_STORE
+from ..pipeline import ExpenseCategorizationPipeline
+from ..bulk_processor import BulkExpenseProcessor
+from ..analytics_engine import AnalyticsEngine
+from .ingest_api import TRANSACTIONS_STORE
 
 router = APIRouter(
     prefix="/analytics",
