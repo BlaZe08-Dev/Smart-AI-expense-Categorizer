@@ -75,7 +75,7 @@ function CategoryPie({ categorySummary }) {
     <div style={styles.wrapper}>
       <h2 style={styles.title}>Category Breakdown</h2>
 
-      <ResponsiveContainer width="100%" height={360}>
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
             data={chartData}
@@ -83,8 +83,8 @@ function CategoryPie({ categorySummary }) {
             nameKey="name"
             cx="50%"
             cy="50%"
-            innerRadius={80}
-            outerRadius={130}
+            innerRadius="45%"
+            outerRadius="70%"
             paddingAngle={3}
             isAnimationActive
           >
@@ -133,11 +133,11 @@ function CategoryPie({ categorySummary }) {
 const styles = {
   wrapper: {
     width: "100%",
-    maxWidth: 700,
+    maxWidth: "100%",
     margin: "0 auto",
     background: "#020617",
     borderRadius: 16,
-    padding: 20,
+    padding: "16px",
   },
   title: {
     textAlign: "center",

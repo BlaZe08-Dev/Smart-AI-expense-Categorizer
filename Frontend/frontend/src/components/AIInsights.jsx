@@ -3,34 +3,56 @@ import React from "react";
 function AIInsights({ analytics }) {
   if (!analytics) return null;
 
-  const categories = analytics.category_totals || {};
-  const totalSpent = analytics.total_spent || 0;
+  const {
+    category_totals = {},
+    total_spent = 0,
+    total_credit = 0,
+    total_debit = total_spent,
+  } = analytics;
 
-  const topCategory = Object.entries(categories).sort(
+  // 🔹 Highest spending category
+  const topCategory = Object.entries(category_totals).sort(
     (a, b) => b[1] - a[1]
   )[0];
+
+  const netFlow = total_credit - total_debit;
+
+  // 🔹 Spending health message
+  let healthMessage = "✅ Spending looks balanced.";
+  if (total_debit > total_credit) {
+    healthMessage = "⚠️ You are spending more than you earn.";
+  }
+  if (total_debit > total_credit * 1.5) {
+    healthMessage = "🔴 High risk: expenses are much higher than income.";
+  }
 
   return (
     <div style={styles.card}>
       <h3>AI Insights</h3>
 
       <p>
-        💡 You spent <b>₹{totalSpent.toFixed(2)}</b> in total.
+        💸 <b>Total Spent:</b> ₹{total_debit.toFixed(2)}
+      </p>
+
+      <p>
+        💰 <b>Total Received:</b> ₹{total_credit.toFixed(2)}
+      </p>
+
+      <p>
+        📊 <b>Net Cash Flow:</b>{" "}
+        <span style={{ color: netFlow >= 0 ? "#22c55e" : "#ef4444" }}>
+          {netFlow >= 0 ? "+" : "-"}₹{Math.abs(netFlow).toFixed(2)}
+        </span>
       </p>
 
       {topCategory && (
         <p>
-          📊 Highest spending category is{" "}
-          <b>{topCategory[0]}</b> (₹{topCategory[1].toFixed(2)}).
+          🏷️ Highest spending category:{" "}
+          <b>{topCategory[0]}</b> (₹{topCategory[1].toFixed(2)})
         </p>
       )}
 
-      {topCategory?.[0].includes("TRANSFER") && (
-        <p>
-          ⚠️ Large amount spent on transfers.  
-          Consider tracking friend-wise expenses.
-        </p>
-      )}
+      <p style={styles.health}>{healthMessage}</p>
     </div>
   );
 }
@@ -40,7 +62,11 @@ const styles = {
     background: "#020617",
     padding: 20,
     borderRadius: 12,
-    marginTop: 30,
+    width: "100%",
+  },
+  health: {
+    marginTop: 10,
+    fontWeight: 500,
   },
 };
 

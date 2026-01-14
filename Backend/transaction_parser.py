@@ -8,7 +8,7 @@ class TransactionParser:
     Bank-statement safe parser.
     """
 
-    DATE_PATTERN = re.compile(r"\b\d{2}-\d{2}-\d{2}\b")
+    DATE_PATTERN = re.compile(r"\b(\d{2}[-/]\d{2}[-/]\d{2,4} | \d{4}-\d{2})\b")
     AMOUNT_PATTERN = re.compile(r"(\d{1,3}(?:,\d{3})*(?:\.\d{2}))")
 
     def parse(self, transaction_lines: List[str]) -> List[Dict]:

@@ -1,23 +1,41 @@
 import { useEffect, useState } from "react";
 import CategoryPie from "../components/CategoryPie";
 import TransactionTable from "../components/TransactionsTable";
-import MonthlyTrend from "../components/MonthlyTrend";
 import TopMerchants from "../components/TopMerchants";
 import AIInsights from "../components/AIInsights";
+import MonthlyTrend from "../components/MonthlyTrend";
+import SpendingHealth from "../components/SpendingHealth";
 
 function Dashboard() {
   const [transactions, setTransactions] = useState([]);
   const [categoryTotals, setCategoryTotals] = useState({});
   const [analytics, setAnalytics] = useState(null);
+  const [isDesktop, setIsDesktop] = useState(
+    window.innerWidth >= 1024
+  );
 
-  // 🔹 Load saved data from localStorage
+  // 🔹 Handle screen resize properly
   useEffect(() => {
-    const storedTransactions = JSON.parse(localStorage.getItem("transactions"));
-    const storedAnalytics = JSON.parse(localStorage.getItem("analytics"));
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
 
-    if (storedTransactions) {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // 🔹 Load saved data
+  useEffect(() => {
+    const storedTransactions = JSON.parse(
+      localStorage.getItem("transactions")
+    );
+    const storedAnalytics = JSON.parse(
+      localStorage.getItem("analytics")
+    );
+
+    if (storedTransactions?.length) {
       setTransactions(storedTransactions);
-      recalcCategoryTotals(storedTransactions);
+      recalcCategoryTotals(storedTransactions, storedAnalytics);
     }
 
     if (storedAnalytics) {
@@ -25,36 +43,41 @@ function Dashboard() {
     }
   }, []);
 
-  // 🔹 Recalculate category totals (after edit)
-  const recalcCategoryTotals = (txns) => {
-  if (!txns || !txns.length) return;
+  // 🔹 Recalculate totals (safe)
+  const recalcCategoryTotals = (txns, existingAnalytics = analytics) => {
+    if (!txns?.length) return;
 
-  const totals = {};
-  let totalSpent = 0;
+    const totals = {};
+    let totalSpent = 0;
 
-  txns.forEach((txn) => {
-    if (txn.type !== "debit") return;
+    txns.forEach((txn) => {
+      if (txn.type !== "debit") return;
 
-    const cat = txn.category || "Others";
-    totals[cat] = (totals[cat] || 0) + txn.amount;
-    totalSpent += txn.amount;
-  });
+      const cat = txn.category || "Others";
+      totals[cat] = (totals[cat] || 0) + txn.amount;
+      totalSpent += txn.amount;
+    });
 
-  const updatedAnalytics = {
-    ...analytics,
-    category_totals: totals,
-    total_spent: totalSpent,
+    const updatedAnalytics = {
+      ...(existingAnalytics || {}),
+      category_totals: totals,
+      total_spent: totalSpent,
+    };
+
+    setCategoryTotals(totals);
+    setAnalytics(updatedAnalytics);
+
+    localStorage.setItem(
+      "analytics",
+      JSON.stringify(updatedAnalytics)
+    );
+    localStorage.setItem(
+      "transactions",
+      JSON.stringify(txns)
+    );
   };
 
-  setCategoryTotals(totals);
-  setAnalytics(updatedAnalytics);
-
-  localStorage.setItem("analytics", JSON.stringify(updatedAnalytics));
-  localStorage.setItem("transactions", JSON.stringify(txns));
-};
-
-
-  // 🔹 When category changes in table
+  // 🔹 Category edit callback
   const handleTransactionsUpdate = (updated) => {
     setTransactions(updated);
     recalcCategoryTotals(updated);
@@ -74,11 +97,15 @@ function Dashboard() {
       <h1>Dashboard</h1>
 
       {/* 🔹 MAIN GRID */}
-      <div style={styles.grid}>
-        {/* LEFT COLUMN */}
+      <div
+        style={{
+          ...styles.grid,
+          gridTemplateColumns: isDesktop ? "2fr 1fr" : "1fr",
+        }}
+      >
+        {/* LEFT */}
         <div style={styles.left}>
           <AIInsights analytics={analytics} />
-
           <CategoryPie categorySummary={categoryTotals} />
 
           {analytics?.daily_totals && (
@@ -86,15 +113,19 @@ function Dashboard() {
           )}
         </div>
 
-        {/* RIGHT COLUMN */}
+        {/* RIGHT */}
         <div style={styles.right}>
+          <SpendingHealth analytics={analytics} />
+          
           {analytics?.merchant_totals && (
-            <TopMerchants merchantTotals={analytics.merchant_totals} />
+            <TopMerchants
+              merchantTotals={analytics.merchant_totals}
+            />
           )}
         </div>
       </div>
 
-      {/* 🔹 TRANSACTIONS TABLE (FULL WIDTH) */}
+      {/* 🔹 TABLE */}
       <div style={styles.tableSection}>
         <TransactionTable
           transactions={transactions}
@@ -108,32 +139,35 @@ function Dashboard() {
 const styles = {
   page: {
     minHeight: "100vh",
-    padding: 20,
+    width: "100%",
+    padding: "clamp(12px, 4vw, 32px)",
     background: "#020617",
     color: "#fff",
+    boxSizing: "border-box",
   },
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "2fr 1fr",
-    gap: 24,
+    gap: "clamp(16px, 4vw, 32px)",
     marginTop: 20,
+    width: "100%",
   },
 
   left: {
     display: "flex",
     flexDirection: "column",
-    gap: 30,
+    gap: "clamp(16px, 3vw, 28px)",
   },
 
   right: {
     display: "flex",
     flexDirection: "column",
-    gap: 30,
+    gap: "clamp(16px, 3vw, 28px)",
   },
 
   tableSection: {
-    marginTop: 40,
+    marginTop: 32,
+    width: "100%",
     overflowX: "auto",
   },
 };
