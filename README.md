@@ -20,11 +20,13 @@ smart insights into spending habits.
 ## 🖥️ How to Run Locally
 
 ### Backend
+From the project root directory:
 ```bash
 cd Real Project
-pip install -r requirements.txt
+pip install -r Backend/requirements.txt
 uvicorn Backend.main:app --reload
-
+📍 Backend URL: http://127.0.0.1:8000
+📍 Backend API docs URL: http://127.0.0.1:8000/docs
 ### Frontend
 ```bash
 cd frontend
