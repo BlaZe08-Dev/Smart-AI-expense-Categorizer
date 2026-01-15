@@ -21,7 +21,7 @@ smart insights into spending habits.
 
 ### Backend
 ```bash
-cd backend
+cd Real Project
 pip install -r requirements.txt
 uvicorn Backend.main:app --reload
 
